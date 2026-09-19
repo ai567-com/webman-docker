@@ -1,9 +1,7 @@
 # Dockerfile for Webman (MaDong Backend)
 FROM php:8.2-cli-alpine
 
-LABEL maintainer="managepro" \
-      org.opencontainers.image.source="https://git.openlocalpdf.com/gitea/webman-docker" \
-      org.opencontainers.image.description="Webman base runtime image with PHP 8.2, Event, Redis and MySQL"
+LABEL maintainer="managepro"
 
 ENV TZ=Asia/Shanghai \
     COMPOSER_ALLOW_SUPERUSER=1
