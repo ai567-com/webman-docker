@@ -51,7 +51,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            suffix=-${{ matrix.arch }}
+            suffix=-${{ matrix.arch }},onlatest=true
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
