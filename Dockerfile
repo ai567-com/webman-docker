@@ -6,8 +6,8 @@ LABEL maintainer="managepro"
 ENV TZ=Asia/Shanghai \
     COMPOSER_ALLOW_SUPERUSER=1
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
-    && apk update \
+# 服务器位于海外（日本节点），Alpine apk 直接使用官方全球 CDN 源 dl-cdn.alpinelinux.org，速度与稳定性更优
+RUN apk update \
     && apk add --no-cache \
         bash \
         curl \
@@ -16,10 +16,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo "${TZ}" > /etc/timezone
 
-# 使用 install-php-extensions 官方推荐的 ADD 方式（支持构建时走代理）
+# 使用 install-php-extensions 官方推荐的 ADD 方式
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-# 使用国内镜像源极速下载并安装扩展
+# 安装 PHP 扩展
 RUN install-php-extensions \
         pcntl \
         posix \
@@ -32,8 +32,8 @@ RUN install-php-extensions \
         opcache \
         intl
 
-# 安装 Composer（直接从国内镜像下载 composer.phar，不需要额外拉取 composer 镜像）
-RUN curl -sS https://mirrors.aliyun.com/composer/composer.phar -o /usr/local/bin/composer \
+# 安装 Composer 并配置国内镜像源（方便业务项目更新依赖）
+RUN curl -sS https://getcomposer.org/composer-stable.phar -o /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
