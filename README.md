@@ -19,7 +19,10 @@ docker build -t webman:8.2 .
 
 ### GitHub Actions 自动构建与发布
 
-已配置 `.github/workflows/build.yml`。每次推送到 `master` / `main` 或推送 tag（如 `v1.0.0`）时，GitHub Actions 会自动通过 QEMU + Buildx 构建多架构镜像（`linux/amd64` 与 `linux/arm64`），并发布到 GitHub Container Registry (GHCR)：
+已配置 `.github/workflows/build.yml`。采用**混合原生双架构矩阵构建**：
+- **`linux/amd64`**：由 GitHub 云端 `ubuntu-latest` 原生构建
+- **`linux/arm64`**：由组织 Self-Hosted ARM Runner 原生硬件全速构建
+- 自动合并生成多架构 Manifest 并发布到 GitHub Container Registry (GHCR)：
 
-- **Registry**: `ghcr.io/567ai/webman-docker:latest`（或对应 tag 如 `:v1.0.0`）
+- **Registry**: `ghcr.io/ai567-com/webman-docker:latest`（或对应 tag 如 `:v1.0.0`）
 - 无论是在 x86_64 服务器、云主机还是本地 Apple Silicon / ARM 设备上，Docker 都会自动拉取匹配本机架构的镜像运行。
