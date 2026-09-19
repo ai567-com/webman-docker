@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        run: |
+          git clone --depth=1 "https://${{ gitea.actor }}:${{ secrets.GITHUB_TOKEN }}@git.openlocalpdf.com/${{ gitea.repository }}.git" .
+          git checkout "${{ github.sha }}" || true
 
       - name: Check Runner Environment
         run: |
