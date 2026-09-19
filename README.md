@@ -17,9 +17,9 @@
 docker build -t webman:8.2 .
 ```
 
-### Gitea CI/CD 自动构建
+### GitHub Actions 自动构建与发布
 
-已配置 `.gitea/workflows/build.yaml`。每次推送到 `master` / `main` 或推送 tag（如 `v1.0.0`）时，Gitea Actions 会自动构建并推送到 Gitea 镜像仓库：
+已配置 `.github/workflows/build.yml`。每次推送到 `master` / `main` 或推送 tag（如 `v1.0.0`）时，GitHub Actions 会自动通过 QEMU + Buildx 构建多架构镜像（`linux/amd64` 与 `linux/arm64`），并发布到 GitHub Container Registry (GHCR)：
 
-- **Registry**: `git.openlocalpdf.com:222/gitea/webman-docker:latest`
-- 确保 Gitea 仓库已启用 Actions 且部署有对应 Runner（如 act_runner）。
+- **Registry**: `ghcr.io/567ai/webman-docker:latest`（或对应 tag 如 `:v1.0.0`）
+- 无论是在 x86_64 服务器、云主机还是本地 Apple Silicon / ARM 设备上，Docker 都会自动拉取匹配本机架构的镜像运行。
